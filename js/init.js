@@ -8,6 +8,7 @@ require.config({
         tmpl: '../templates',
         tuna: './vendor/tuna',
         jquery: './vendor/jquery',
+        'handlebars-v3.0.1': './vendor/handlebars-v3.0.1',
         'backbone.marionette': './vendor/backbone.marionette',
         'backbone.wreqr': './vendor/backbone.wreqr',
         'backbone.babysitter': './vendor/backbone.babysitter',
