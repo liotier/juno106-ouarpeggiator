@@ -26,50 +26,61 @@ define([
             initialize: function() {
                 var that = this;
                 var multiplier;
-                
+
                 this.dragging = null;
-                
-                $(window).on('mousemove', function(e) {
+                this._viewId = _.uniqueId('moduleView');
+
+                this._onMouseMove = _.throttle(function(e) {
                     if(!_.isNull(that.dragging)) {
                         that.dragging.addClass('dragging');
-                        
+
                         if(that.dragging.hasClass('fader__knob')) {
                             that.calculateFaderMovement(that.dragging, e.pageY);
                         } else if(that.dragging.hasClass('switch__knob')) {
                             that.calculateSwitchMovement(that.dragging, e.pageY);
                         }
                     }
-                });
-                
-                $(window).on('mouseup', function(e) {
+                }, 16);
+
+                this._onMouseUp = function(e) {
                     if(that.dragging) {
                         that.dragging.removeClass('dragging');
                     }
                     that.dragging = null;
-                });
+                };
+
+                $(window).on('mousemove.' + this._viewId, this._onMouseMove);
+                $(window).on('mouseup.' + this._viewId, this._onMouseUp);
+            },
+
+            onDestroy: function() {
+                $(window).off('mousemove.' + this._viewId);
+                $(window).off('mouseup.' + this._viewId);
             },
             
             bindFaders: function() {
                 var that = this;
-                
+
                 this.ui.faderKnob.mousedown(function(e) {
                     that.dragging = $(e.currentTarget);
                     that.clickOffset = e.pageY - that.dragging.offset().top;
+                    that._dragSlotHeight = that.dragging.parent().height();
+                    that._dragSlotTop = that.dragging.parent().offset().top;
                 });
             },
-            
+
             calculateFaderMovement: function(el, yPos) {
                 var position;
                 var value;
-                var slotTop = el.parent().offset().top;
-                var faderCompensation = this.clickOffset / this.slotHeight * 100;
+                var slotTop = this._dragSlotTop;
+                var faderCompensation = this.clickOffset / this._dragSlotHeight * 100;
                 
                 if((yPos - faderCompensation) < slotTop) {
                     position = -5;
-                } else if(yPos > (slotTop + this.slotHeight + faderCompensation)) {
+                } else if(yPos > (slotTop + this._dragSlotHeight + faderCompensation)) {
                     position = 95;
                 } else {
-                    position = ((yPos - slotTop) / this.slotHeight * 100) - faderCompensation;
+                    position = ((yPos - slotTop) / this._dragSlotHeight * 100) - faderCompensation;
                 }
 
                 el.css({

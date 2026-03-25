@@ -31,10 +31,16 @@ define([
 
             onShow: function() {
                 this.positionKeys();
-                
-                $(window).on('keydown', this.keyDownHandler.bind(this));
-                $(window).on('keyup', this.keyUpHandler.bind(this));
-                
+
+                this._boundKeyDown = this.keyDownHandler.bind(this);
+                this._boundKeyUp = this.keyUpHandler.bind(this);
+                $(window).on('keydown.keyboard', this._boundKeyDown);
+                $(window).on('keyup.keyboard', this._boundKeyUp);
+            },
+
+            onDestroy: function() {
+                $(window).off('keydown.keyboard');
+                $(window).off('keyup.keyboard');
             },
             
             keyUpHandler: function(e) {

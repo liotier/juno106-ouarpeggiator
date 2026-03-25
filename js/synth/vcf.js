@@ -165,6 +165,16 @@ define([
                 filterEnvelope.gain.linearRampToValueAtTime(0, now + releaseLength);
             };
             
+            this.disconnect = function() {
+                try { offset.stop(); } catch(e) {}
+                try { offset.disconnect(); } catch(e) {}
+                try { filterEnvelope.disconnect(); } catch(e) {}
+                try { envMod.disconnect(); } catch(e) {}
+                try { keyFollow.disconnect(); } catch(e) {}
+                try { filter1.disconnect(); } catch(e) {}
+                try { filter2.disconnect(); } catch(e) {}
+            };
+
             Object.defineProperties(this, {
                 'cutoff': {
                     'set': function(value) { 
