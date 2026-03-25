@@ -563,12 +563,9 @@ define([
             require( deps, function (){
               load.fromText(text);
 
-              //Give result to load. Need to wait until the module
-              //is fully parse, which will happen after this
-              //execution.
-              parentRequire([name], function (value) {
-                load(value);
-              });
+              // RequireJS 2.3+ handles module resolution inside fromText via
+              // localRequire([moduleName], load) — no need for parentRequire here;
+              // calling it too caused a double-load timeout with RequireJS 2.3.x.
             });
           }
           else {
