@@ -4,15 +4,30 @@ define([
 ],
     
     function(App, util) {
+
+        // Shared noise buffer — allocated once, reused by all voices
+        var sharedNoiseBuffer = null;
+        function getSharedNoiseBuffer() {
+            if (!sharedNoiseBuffer) {
+                var bufferSize = App.context.sampleRate;
+                sharedNoiseBuffer = App.context.createBuffer(1, bufferSize, App.context.sampleRate);
+                var output = sharedNoiseBuffer.getChannelData(0);
+                for (var i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+            }
+            return sharedNoiseBuffer;
+        }
+
         function DCO(options) {
-            
+
             this.input = [];
             this.output = [];
             this.oscillators = [];
             this.NUM_OSCILLATORS;
-            
+
             var that = this;
-            
+
             var lfoPwmEnabled = options.lfoPwmEnabled;
             var sawtooth = createOsc(options.frequency, 'sawtooth', options.waveform.sawtoothLevel);
             var pulseWidth;
@@ -70,16 +85,10 @@ define([
             }
             
             function createNoise(level) {
-                var bufferSize = App.context.sampleRate;
-                var noiseBuffer = App.context.createBuffer(1, bufferSize, App.context.sampleRate);
-                var output = noiseBuffer.getChannelData(0);
                 var gain;
-                
-                for (var i = 0; i < bufferSize; i++) {
-                    output[i] = Math.random() * 2 - 1;       
-                }
+
                 whiteNoise = App.context.createBufferSource();
-                whiteNoise.buffer = noiseBuffer;
+                whiteNoise.buffer = getSharedNoiseBuffer();
                 whiteNoise.loop = true;
                 
                 gain = App.context.createGain();

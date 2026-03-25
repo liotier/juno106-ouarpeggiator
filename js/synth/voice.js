@@ -218,7 +218,24 @@ define([
             },
 
             disconnect: function() {
-                this.env.output.disconnect(this.cho.input);
+                try { this.env.output.disconnect(this.cho.input); } catch(e) {}
+                try { this.vca.output.disconnect(this.env.input); } catch(e) {}
+                try { this.vcf.disconnect(); } catch(e) {}
+                try { this.hpf.output.disconnect(); } catch(e) {}
+
+                // Disconnect LFO modulation routes
+                try { this.lfo.pitchMod.disconnect(); } catch(e) {}
+                try { this.lfo.freqMod.disconnect(); } catch(e) {}
+                try { this.lfo.pwmMod.disconnect(); } catch(e) {}
+
+                // Disconnect DCO outputs
+                if (this.dco.output) {
+                    _.forEach(this.dco.output, function(node) {
+                        try { node.disconnect(); } catch(e) {}
+                    });
+                }
+
+                this.stopListening();
             }
     });
 });
