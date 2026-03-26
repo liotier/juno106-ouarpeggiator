@@ -2,7 +2,7 @@
 
 106.js is an emulation of the classic [Roland Juno-106 analog synthesizer](http://en.wikipedia.org/wiki/Roland_Juno-106).
 
-[You can play 106.js here](https://liotier.github.io/juno106-ouarpeggiator/).
+[You can play 106.js here](https://stevengoldberg.github.io/juno106/).
 
 # System Requirements
 
@@ -106,7 +106,7 @@ Juno-106.js was written in Javascript using the [WebAudio](http://webaudio.githu
 * v1.0: First public release — 5/18/2015
 * v1.1: Naming and sharing of user patches — 5/21/2015
 * v1.2: MIDI CC mapping — 5/31/2015
-* v1.3: Fork improvements
+* v1.3:
   * Fixed broken page load caused by stale require-handlebars-plugin submodule and incorrect i18nprecompile stub
   * All notes silenced when window is hidden (tab switch, minimise)
   * Linting cleanup in envelope code
@@ -118,3 +118,4 @@ Juno-106.js was written in Javascript using the [WebAudio](http://webaudio.githu
   * CDN references upgraded to HTTPS
   * Modernizr deferred to avoid render-blocking
   * MIDI browser support updated: Firefox v108+ confirmed working; Safari noted as unsupported
+  * Keyboard input now uses physical key position (`KeyboardEvent.code`) instead of character code, so non-QWERTY layouts work correctly
