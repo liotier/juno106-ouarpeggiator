@@ -30,6 +30,10 @@ Every control on 106.js is mappable to respond to MIDI CC messages, and your MID
 
 Note that if you're mapping a button or switch on your controller that only sends one message at a time, you'll have to press it a few times in order for the mapping to be assigned.
 
+# Ouarpeggiator Integration
+
+This branch integrates with [Ouarpeggiator](https://liotier.github.io/ouarpeggiator/). Open both pages and the Ouarpeggiator will send MIDI note messages to 106.js via `postMessage`.
+
 # Synthesis Overview
 
 The following is a brief description of each control on 106.js.
@@ -112,6 +116,7 @@ GitHub Pages serves from `ouarpeggiator-integration`.
 * v1.1: Naming and sharing of user patches — 2015-05-21
 * v1.2: MIDI CC mapping — 2015-05-31
 * v1.3 (liotier fork):
+  * Ouarpeggiator integration via `postMessage`
   * Keyboard-layout-independent key mapping (AZERTY, QWERTZ, Dvorak, etc.)
   * Click-to-toggle binary switches (LFO/MAN, ENV/GATE, NORM/INV, PULSE/SAW)
   * Click-to-position ternary RANGE switch labels
